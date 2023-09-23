@@ -1,0 +1,2781 @@
+<!DOCTYPE html>
+<!-- saved from url=(0084)https://h5bp.org/Front-end-Developer-Interview-Questions/questions/coding-questions/ -->
+<html lang="en" itemscope="" itemtype="https://schema.org/Article">
+  <div
+    id="twoseven-scripts"
+    data-info="Scripts added by TwoSeven extension"
+    style="
+      display: none !important;
+      position: static !important;
+      top: 0px !important;
+      left: 0px !important;
+      width: 0px !important;
+      height: 0px !important;
+    "
+  >
+    <script
+      type="text/javascript"
+      id="__tmpScript-966075820"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven = window.twoseven || {};
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-968970459"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.waitForDOMNode = async function t(e, t = document) {
+          e = e || {};
+          const { type: n, value: o } = e;
+          if (!n || !o) throw new Error("Must specify identifier");
+          let s = o;
+          switch (n) {
+            case "tag":
+              s = o.toUpperCase();
+          }
+          if ("check" !== n) {
+            const e = i({ type: "selector", value: s }, [], t);
+            if (e) return new Promise((t) => t(e));
+          }
+          function i({ type: e, value: t }, n, o) {
+            let s;
+            switch (e) {
+              case "tag":
+                s = n.find((e) => e.tagName === t);
+                break;
+              case "selector":
+                s = o.querySelector(t);
+            }
+            return s;
+          }
+          async function a({ type: e, value: t }, n, o) {
+            let s;
+            switch (e) {
+              case "tag":
+                s = n.find((e) => e.tagName === t);
+                break;
+              case "selector":
+                s = o.querySelector(t);
+                break;
+              case "check":
+                for (const e of n) {
+                  if (await t(e)) return e;
+                }
+            }
+            return s;
+          }
+          return new Promise((e, o) => {
+            const r = new MutationObserver(async (o) => {
+              for (const w of o)
+                if ("childList" === w.type) {
+                  const o = Array.from(w.addedNodes);
+                  let d;
+                  if (
+                    (d =
+                      "check" === n
+                        ? await a({ type: n, value: s }, o, t)
+                        : await i({ type: n, value: s }, o, t))
+                  )
+                    return r.disconnect(), e(d);
+                }
+            });
+            r.observe(t, { childList: !0, subtree: !0 });
+          });
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-167464631"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.reportError = function n(e, t, n) {
+          "string" == typeof (n = n || {}) && (n = { message: n });
+          const { message: o, stack: s } = t;
+          Object.assign(n, { tag: e, error: { message: o, stack: s } }),
+            window.tsExtGetPostToParent()({
+              name: name,
+              tag: e,
+              action: "report-error",
+              json: n,
+            }),
+            console.error(JSON.stringify(n.error));
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-540975969"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twosevenHmsToSecondsOnly = function (str) {
+          var p = str.split(":"),
+            s = 0,
+            m = 1;
+
+          while (p.length > 0) {
+            s += m * parseInt(p.pop(), 10);
+            m *= 60;
+          }
+
+          return s;
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-814761690"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twosevenExtLog = function (e, o, c) {
+          o || ((o = e), (e = void 0));
+          let n = c || "black";
+          if (c)
+            switch (c) {
+              case "success":
+                n = "Green";
+                break;
+              case "info":
+                n = "DodgerBlue";
+                break;
+              case "error":
+                n = "Red";
+                break;
+              case "warning":
+                n = "Orange";
+                break;
+              default:
+                n = c;
+            }
+          e
+            ? console.log("%c" + e + ": " + o, `color:${n}`)
+            : console.log("%c" + o, `color:${n}`);
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-786354252"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        document.twosevenGET = function (url, callback) {
+          var xmlhttp = new XMLHttpRequest();
+
+          xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+              if (xmlhttp.status == 200) {
+                callback(null, xmlhttp.responseText);
+              } else {
+                callback("something else other than 200 was returned", "");
+              }
+            }
+          };
+          xmlhttp.open("GET", url, true);
+          xmlhttp.send();
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-552427837"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.triggerEvent = function (e, t, n, o = !1) {
+          let s;
+          o
+            ? (n && "string" != typeof n && (n = JSON.stringify(n)), (s = n))
+            : (s = { data: n }),
+            window.twosevenScriptsDiv &&
+              n &&
+              "object" == typeof n &&
+              (console.warn(
+                `WARNING: Attempting to send an object via event.detail from CS->Page does not work on Firefox: ${JSON.stringify(
+                  n
+                )}`
+              ),
+              console.error(new Error().stack));
+          const i = new CustomEvent(t, {
+            bubbles: !0,
+            composed: !0,
+            detail: s,
+          });
+          e.dispatchEvent(i);
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-191331202"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.postTo = async function o(e, t, n = !1) {
+          let o;
+          return (
+            (t.name = t.name || name),
+            (o = n
+              ? new Promise((e) => {
+                  const n = `ack-${t.action}-${(1e9 * Math.random()) | 0}`;
+                  t.ack = { event: n };
+                  window.debug &&
+                    ["play", "pause", "currentTime"].some((e) =>
+                      t.action.includes(e)
+                    ),
+                    window.addEventListener(
+                      "message",
+                      function t({ data: o = {} }) {
+                        o.action === n &&
+                          (window.removeEventListener("message", t), e(o.json));
+                      }
+                    );
+                })
+              : new Promise((e) => e())),
+            e.postMessage(t, "*"),
+            o
+          );
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-581684251"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.tsExtGetPostTo = function s() {
+          return (window.twoseven && window.twoseven.postTo) || window.postTo;
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-892524033"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.tsExtGetPostToParent = function i() {
+          return (
+            (window.twoseven && window.twoseven.postToParent) ||
+            window.postToParent
+          );
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-993564195"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.postResponse = async function a(e, t) {
+          const {
+            source: n,
+            data: {
+              ack: { event: o },
+            },
+          } = e;
+          window.tsExtGetPostTo()(n, { action: o, json: t });
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-219969527"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.postResponse = async function a(e, t) {
+          const {
+            source: n,
+            data: {
+              ack: { event: o },
+            },
+          } = e;
+          window.tsExtGetPostTo()(n, { action: o, json: t });
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-221207141"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.postToParent = async function r(e, t = !1) {
+          return window.tsExtGetPostTo()(window.parent, e, t);
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-161577601"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.postToTop = async function w(e, t = !1) {
+          return window.tsExtGetPostTo()(window.top, e, t);
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-538958024"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.postToTop = async function w(e, t = !1) {
+          return window.tsExtGetPostTo()(window.top, e, t);
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-756625339"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.getFromStorage = (e) =>
+          new Promise((t, n) => {
+            const o = "get-from-storage-" + ((1e9 * Math.random()) | 0);
+            window.addEventListener(o, (e) => {
+              window.removeEventListener(o, this);
+              const {
+                detail: {
+                  data: { value: n },
+                },
+              } = e;
+              t(n);
+            }),
+              triggerEvent(window, "get-from-storage", { key: e, evt: o });
+          });
+        window.twoseven.saveToStorage = (e) => {
+          triggerEvent(window, "save-to-storage", e);
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-689398046"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.attachHistoryListeners = function d() {
+          const e = history.pushState;
+          history.pushState = function (t, n, o) {
+            return (
+              "function" == typeof history.onpushstate &&
+                history.onpushstate({ state: t }),
+              triggerEvent(window, "pushstate", { uri: o }),
+              e.apply(history, arguments)
+            );
+          };
+          const t = history.replaceState;
+          history.replaceState = function (e) {
+            return (
+              "function" == typeof history.onreplacestate &&
+                history.onreplacestate({ state: e }),
+              t.apply(history, arguments)
+            );
+          };
+        };
+        window.attachHistoryListeners();
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-484762794"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.once = function c(e, t, n) {
+          e.addEventListener(t, function o(s) {
+            e.removeEventListener(t, o), n(s);
+          });
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-728418524"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.nextTick = function v() {
+          return new Promise((e) => setTimeout(e, 0));
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-327311227"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.isOnTwoSevenTab = async () => {
+          const result = await window.twoseven.postTo(
+            window,
+            { action: "is-on-twoseven-tab" },
+            true
+          );
+          return result;
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-429689828"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.isPaused = async () => {
+          const result = await window.twoseven.postTo(
+            window,
+            { action: "twoseven:pause-state" },
+            true
+          );
+          return result;
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-111766473"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.waitForProp = function u(e, t, n) {
+          return new Promise((o) => {
+            if (e[t]) return void o();
+            const s = setInterval(() => {
+              e[t] && (clearInterval(s), o());
+            }, n);
+          });
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-53112089"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.overrideMethod = function p(e, t, n) {
+          const o = e[t].bind(e);
+          e[t] = async function (...e) {
+            return await n(...e), o(...e);
+          };
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-555170610"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.waitForVideoTimeUpdate = function g(e, t = 3) {
+          return new Promise((n) => {
+            let o = 0;
+            const s = () => {
+              ++o === t && (e.removeEventListener("timeupdate", s), n());
+            };
+            e.addEventListener("timeupdate", s);
+          });
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-974108395"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.waitForVideoReadyState = function l(e, t, n = 30) {
+          return t(e.readyState)
+            ? Promise.resolve()
+            : new Promise((o) => {
+                const s = setInterval(() => {
+                  t(e.readyState) && (clearInterval(s), o());
+                }, n);
+              });
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-658196553"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.waitForVideoToHaveFutureData = function m(e, ...t) {
+          return window.twoseven.waitForVideoReadyState(e, (e) => e >= 3, ...t);
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-118003285"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.waitForSameSiteCookies = function f() {
+          return window.twoseven.waitForProp(
+            window.twoseven,
+            "__cookiesUpdated"
+          );
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-29265860"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven = window.twoseven || {};
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-864019165"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.waitForDOMNode = async function t(e, t = document) {
+          e = e || {};
+          const { type: n, value: o } = e;
+          if (!n || !o) throw new Error("Must specify identifier");
+          let s = o;
+          switch (n) {
+            case "tag":
+              s = o.toUpperCase();
+          }
+          if ("check" !== n) {
+            const e = i({ type: "selector", value: s }, [], t);
+            if (e) return new Promise((t) => t(e));
+          }
+          function i({ type: e, value: t }, n, o) {
+            let s;
+            switch (e) {
+              case "tag":
+                s = n.find((e) => e.tagName === t);
+                break;
+              case "selector":
+                s = o.querySelector(t);
+            }
+            return s;
+          }
+          async function a({ type: e, value: t }, n, o) {
+            let s;
+            switch (e) {
+              case "tag":
+                s = n.find((e) => e.tagName === t);
+                break;
+              case "selector":
+                s = o.querySelector(t);
+                break;
+              case "check":
+                for (const e of n) {
+                  if (await t(e)) return e;
+                }
+            }
+            return s;
+          }
+          return new Promise((e, o) => {
+            const r = new MutationObserver(async (o) => {
+              for (const w of o)
+                if ("childList" === w.type) {
+                  const o = Array.from(w.addedNodes);
+                  let d;
+                  if (
+                    (d =
+                      "check" === n
+                        ? await a({ type: n, value: s }, o, t)
+                        : await i({ type: n, value: s }, o, t))
+                  )
+                    return r.disconnect(), e(d);
+                }
+            });
+            r.observe(t, { childList: !0, subtree: !0 });
+          });
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-710740022"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.reportError = function n(e, t, n) {
+          "string" == typeof (n = n || {}) && (n = { message: n });
+          const { message: o, stack: s } = t;
+          Object.assign(n, { tag: e, error: { message: o, stack: s } }),
+            window.tsExtGetPostToParent()({
+              name: name,
+              tag: e,
+              action: "report-error",
+              json: n,
+            }),
+            console.error(JSON.stringify(n.error));
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-489176760"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twosevenHmsToSecondsOnly = function (str) {
+          var p = str.split(":"),
+            s = 0,
+            m = 1;
+
+          while (p.length > 0) {
+            s += m * parseInt(p.pop(), 10);
+            m *= 60;
+          }
+
+          return s;
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-24546719"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twosevenExtLog = function (e, o, c) {
+          o || ((o = e), (e = void 0));
+          let n = c || "black";
+          if (c)
+            switch (c) {
+              case "success":
+                n = "Green";
+                break;
+              case "info":
+                n = "DodgerBlue";
+                break;
+              case "error":
+                n = "Red";
+                break;
+              case "warning":
+                n = "Orange";
+                break;
+              default:
+                n = c;
+            }
+          e
+            ? console.log("%c" + e + ": " + o, `color:${n}`)
+            : console.log("%c" + o, `color:${n}`);
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-411607035"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        document.twosevenGET = function (url, callback) {
+          var xmlhttp = new XMLHttpRequest();
+
+          xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+              if (xmlhttp.status == 200) {
+                callback(null, xmlhttp.responseText);
+              } else {
+                callback("something else other than 200 was returned", "");
+              }
+            }
+          };
+          xmlhttp.open("GET", url, true);
+          xmlhttp.send();
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-742187121"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.triggerEvent = function (e, t, n, o = !1) {
+          let s;
+          o
+            ? (n && "string" != typeof n && (n = JSON.stringify(n)), (s = n))
+            : (s = { data: n }),
+            window.twosevenScriptsDiv &&
+              n &&
+              "object" == typeof n &&
+              (console.warn(
+                `WARNING: Attempting to send an object via event.detail from CS->Page does not work on Firefox: ${JSON.stringify(
+                  n
+                )}`
+              ),
+              console.error(new Error().stack));
+          const i = new CustomEvent(t, {
+            bubbles: !0,
+            composed: !0,
+            detail: s,
+          });
+          e.dispatchEvent(i);
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-706768319"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.postTo = async function o(e, t, n = !1) {
+          let o;
+          return (
+            (t.name = t.name || name),
+            (o = n
+              ? new Promise((e) => {
+                  const n = `ack-${t.action}-${(1e9 * Math.random()) | 0}`;
+                  t.ack = { event: n };
+                  window.debug &&
+                    ["play", "pause", "currentTime"].some((e) =>
+                      t.action.includes(e)
+                    ),
+                    window.addEventListener(
+                      "message",
+                      function t({ data: o = {} }) {
+                        o.action === n &&
+                          (window.removeEventListener("message", t), e(o.json));
+                      }
+                    );
+                })
+              : new Promise((e) => e())),
+            e.postMessage(t, "*"),
+            o
+          );
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-881152738"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.tsExtGetPostTo = function s() {
+          return (window.twoseven && window.twoseven.postTo) || window.postTo;
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-464669601"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.tsExtGetPostToParent = function i() {
+          return (
+            (window.twoseven && window.twoseven.postToParent) ||
+            window.postToParent
+          );
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-19416400"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.postResponse = async function a(e, t) {
+          const {
+            source: n,
+            data: {
+              ack: { event: o },
+            },
+          } = e;
+          window.tsExtGetPostTo()(n, { action: o, json: t });
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-356935281"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.postResponse = async function a(e, t) {
+          const {
+            source: n,
+            data: {
+              ack: { event: o },
+            },
+          } = e;
+          window.tsExtGetPostTo()(n, { action: o, json: t });
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-731021272"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.postToParent = async function r(e, t = !1) {
+          return window.tsExtGetPostTo()(window.parent, e, t);
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-211014728"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.postToTop = async function w(e, t = !1) {
+          return window.tsExtGetPostTo()(window.top, e, t);
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-742016457"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.postToTop = async function w(e, t = !1) {
+          return window.tsExtGetPostTo()(window.top, e, t);
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-138347585"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.getFromStorage = (e) =>
+          new Promise((t, n) => {
+            const o = "get-from-storage-" + ((1e9 * Math.random()) | 0);
+            window.addEventListener(o, (e) => {
+              window.removeEventListener(o, this);
+              const {
+                detail: {
+                  data: { value: n },
+                },
+              } = e;
+              t(n);
+            }),
+              triggerEvent(window, "get-from-storage", { key: e, evt: o });
+          });
+        window.twoseven.saveToStorage = (e) => {
+          triggerEvent(window, "save-to-storage", e);
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-320659255"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.attachHistoryListeners = function d() {
+          const e = history.pushState;
+          history.pushState = function (t, n, o) {
+            return (
+              "function" == typeof history.onpushstate &&
+                history.onpushstate({ state: t }),
+              triggerEvent(window, "pushstate", { uri: o }),
+              e.apply(history, arguments)
+            );
+          };
+          const t = history.replaceState;
+          history.replaceState = function (e) {
+            return (
+              "function" == typeof history.onreplacestate &&
+                history.onreplacestate({ state: e }),
+              t.apply(history, arguments)
+            );
+          };
+        };
+        window.attachHistoryListeners();
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-863213381"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.once = function c(e, t, n) {
+          e.addEventListener(t, function o(s) {
+            e.removeEventListener(t, o), n(s);
+          });
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-508877879"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.nextTick = function v() {
+          return new Promise((e) => setTimeout(e, 0));
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-556706883"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.isOnTwoSevenTab = async () => {
+          const result = await window.twoseven.postTo(
+            window,
+            { action: "is-on-twoseven-tab" },
+            true
+          );
+          return result;
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-753863429"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.isPaused = async () => {
+          const result = await window.twoseven.postTo(
+            window,
+            { action: "twoseven:pause-state" },
+            true
+          );
+          return result;
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-625854483"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.waitForProp = function u(e, t, n) {
+          return new Promise((o) => {
+            if (e[t]) return void o();
+            const s = setInterval(() => {
+              e[t] && (clearInterval(s), o());
+            }, n);
+          });
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-929894394"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.overrideMethod = function p(e, t, n) {
+          const o = e[t].bind(e);
+          e[t] = async function (...e) {
+            return await n(...e), o(...e);
+          };
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-270829206"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.waitForVideoTimeUpdate = function g(e, t = 3) {
+          return new Promise((n) => {
+            let o = 0;
+            const s = () => {
+              ++o === t && (e.removeEventListener("timeupdate", s), n());
+            };
+            e.addEventListener("timeupdate", s);
+          });
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-311366307"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.waitForVideoReadyState = function l(e, t, n = 30) {
+          return t(e.readyState)
+            ? Promise.resolve()
+            : new Promise((o) => {
+                const s = setInterval(() => {
+                  t(e.readyState) && (clearInterval(s), o());
+                }, n);
+              });
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-718845450"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.waitForVideoToHaveFutureData = function m(e, ...t) {
+          return window.twoseven.waitForVideoReadyState(e, (e) => e >= 3, ...t);
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-395031520"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        window.twoseven.waitForSameSiteCookies = function f() {
+          return window.twoseven.waitForProp(
+            window.twoseven,
+            "__cookiesUpdated"
+          );
+        };
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      id="__tmpScript-640108763"
+      data-added-by-two-seven="1"
+    >
+      (function () {
+        const modal = document.querySelector(".twoseven-ext-tab-media-modal");
+        const modalCloseBtn = modal.querySelector(".close");
+        function closeModal() {
+          modal.style.display = "none";
+          const frame = document.querySelector(
+            "#twoseven-ext-tab-media-iframe"
+          ).contentWindow;
+          frame.postMessage(
+            {
+              __evt_name: "modal-hide",
+            },
+            "*"
+          );
+        }
+        modalCloseBtn.onclick = closeModal;
+
+        window.onmessage = function (e) {
+          if (e.data.__evt_name === "modal-hide") {
+            closeModal();
+          }
+        };
+
+        window.twoseven.closeTabMediaModal = closeModal;
+
+        window.onclick = function (e) {
+          if (
+            e.target.id === "twoseven-ext-tab-media-modal" &&
+            modal.style.display === "block"
+          ) {
+            closeModal();
+          }
+        };
+      })();
+    </script>
+  </div>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Coding Questions ★ Front-end Developer Interview Questions</title>
+    <meta
+      name="description"
+      content="A list of helpful front-end related questions you can use to interview potential candidates, test yourself or completely ignore."
+    />
+    <meta
+      name="keywords"
+      content="front-end, interview questions, css questions, js questions, html questions, performance questions, interview test"
+    />
+    <meta name="author" content="Front-end Developer Interview Questions" />
+    <meta itemprop="author" content="Front-end Developer Interview Questions" />
+    <meta
+      itemprop="name"
+      content="Coding Questions ★ Front-end Developer Interview Questions"
+    />
+    <meta
+      itemprop="description"
+      content="A list of helpful front-end related questions you can use to interview potential candidates, test yourself or completely ignore."
+    />
+    <meta
+      itemprop="image"
+      content="https://h5bp.org/Front-end-Developer-Interview-Questions//assets/images/og-image.png"
+    />
+    <meta
+      property="og:title"
+      content="Coding Questions ★ Front-end Developer Interview Questions"
+    />
+    <meta
+      property="og:description"
+      content="A list of helpful front-end related questions you can use to interview potential candidates, test yourself or completely ignore."
+    />
+    <meta
+      property="og:url"
+      content="https://h5bp.org/Front-end-Developer-Interview-Questions//questions/coding-questions/"
+    />
+    <meta
+      property="og:site_name"
+      content="Front-end Developer Interview Questions"
+    />
+    <meta
+      property="og:image"
+      content="https://h5bp.org/Front-end-Developer-Interview-Questions//assets/images/og-image.png"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="Coding Questions ★ Front-end Developer Interview Questions"
+    />
+    <meta
+      name="twitter:description"
+      content="A list of helpful front-end related questions you can use to interview potential candidates, test yourself or completely ignore."
+    />
+    <meta name="twitter:site" content="@h5bp" />
+    <meta
+      name="twitter:image"
+      content="https://h5bp.org/Front-end-Developer-Interview-Questions//assets/images/og-image.png"
+    />
+    <meta name="twitter:creator" content="@h5bp" />
+    <link
+      type="image/png"
+      rel="apple-touch-icon"
+      href="https://h5bp.org/Front-end-Developer-Interview-Questions//assets/images/apple-touch-icon.png"
+    />
+    <link
+      type="image/png"
+      sizes="32x32"
+      rel="icon"
+      href="https://h5bp.org/Front-end-Developer-Interview-Questions//assets/images/favicon-32x32.png"
+    />
+    <link
+      type="image/png"
+      sizes="16x16"
+      rel="icon"
+      href="https://h5bp.org/Front-end-Developer-Interview-Questions//assets/images/favicon-32x32.png"
+    />
+    <link
+      type="image/png"
+      color="#181818"
+      rel="mask-icon"
+      href="https://h5bp.org/Front-end-Developer-Interview-Questions//assets/images/favicon-96x96.png"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="robots" content="index,follow" />
+    <script>
+      console.log(page.lang);
+    </script>
+    <style>
+      code[class*="language-"],
+      pre[class*="language-"] {
+        color: #c5c8c6;
+        text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+        font-family: Inconsolata, Monaco, Consolas, "Courier New", Courier,
+          monospace;
+        direction: ltr;
+        text-align: left;
+        white-space: pre;
+        word-spacing: normal;
+        word-break: normal;
+        line-height: 1.5;
+        -moz-tab-size: 4;
+        -o-tab-size: 4;
+        tab-size: 4;
+        -webkit-hyphens: none;
+        -moz-hyphens: none;
+        -ms-hyphens: none;
+        hyphens: none;
+      }
+      pre[class*="language-"] {
+        padding: 1em;
+        margin: 0.5em 0;
+        overflow: auto;
+        border-radius: 0.3em;
+      }
+      :not(pre) > code[class*="language-"],
+      pre[class*="language-"] {
+        background: #370b44;
+      }
+      :not(pre) > code[class*="language-"] {
+        padding: 0.1em;
+        border-radius: 0.3em;
+      }
+      .token.cdata,
+      .token.comment,
+      .token.doctype,
+      .token.prolog {
+        color: #7c7c7c;
+      }
+      .token.punctuation {
+        color: #c5c8c6;
+      }
+      .namespace {
+        opacity: 0.7;
+      }
+      .token.keyword,
+      .token.property,
+      .token.tag {
+        color: #96cbfe;
+      }
+      .token.class-name {
+        color: #ffffb6;
+        text-decoration: underline;
+      }
+      .token.boolean,
+      .token.constant {
+        color: #9c9;
+      }
+      .token.deleted,
+      .token.symbol {
+        color: #f92672;
+      }
+      .token.number {
+        color: #ff73fd;
+      }
+      .token.attr-name,
+      .token.builtin,
+      .token.char,
+      .token.inserted,
+      .token.selector,
+      .token.string {
+        color: #a8ff60;
+      }
+      .token.variable {
+        color: #c6c5fe;
+      }
+      .token.operator {
+        color: #ededed;
+      }
+      .token.entity {
+        color: #ffffb6;
+      }
+      .token.url {
+        color: #96cbfe;
+      }
+      .language-css .token.string,
+      .style .token.string {
+        color: #87c38a;
+      }
+      .token.atrule,
+      .token.attr-value {
+        color: #f9ee98;
+      }
+      .token.function {
+        color: #dad085;
+      }
+      .token.regex {
+        color: #e9c062;
+      }
+      .token.important {
+        color: #fd971f;
+      }
+      .token.bold,
+      .token.important {
+        font-weight: 700;
+      }
+      .token.italic {
+        font-style: italic;
+      }
+      .token.entity {
+        cursor: help;
+      }
+      :root {
+        --font-family-heading: sans-serif;
+        --font-family-body: Georgia, serif;
+        --font-family-code: Menlo, Monaco, "Courier New", monospace;
+        --color-primary: #835eff;
+        --color-secondary: #ff008d;
+        --color-safe: #8338ec;
+        --color-gradient: linear-gradient(
+          to right,
+          var(--color-primary),
+          var(--color-secondary)
+        );
+        --color-highlight: var(--color-primary);
+        --color-gray-opacity: rgba(39, 39, 39, 0.04);
+        --color-heading: #23231a;
+        --color-text: #23231a;
+        --background-default: #f9f9f9;
+        --border-radius-default: 5px;
+        --box-shadow-default: 0 2rem 4rem rgba(0, 0, 0, 0.15);
+        --transition-duration: 0.27s;
+      }
+      body.rtl {
+        --font-family-body: Arial, Helvetica, sans-serif;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        outline-color: var(--color-primary);
+      }
+      ::selection {
+        background: var(--color-primary);
+        color: var(--background-default);
+      }
+      ::-moz-selection {
+        background: var(--color-primary);
+        color: var(--background-default);
+      }
+      .nav {
+        padding: 1rem 0;
+        position: relative;
+        font-family: var(--font-family-heading);
+      }
+      .nav li {
+        word-wrap: none;
+        white-space: nowrap;
+      }
+      .navigation {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        font-size: 1rem;
+      }
+      .navigation-questions-label {
+        margin-right: auto;
+      }
+      @media (min-width: 60em) {
+        .navigation-questions-label {
+          margin-right: 0;
+        }
+      }
+      .navigation-toggle {
+        display: inline-block;
+        appearance: none;
+        border: 0;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        background: 0 0;
+      }
+      .navigation-toggle::after {
+        content: "\25BE";
+        padding-left: 0.3rem;
+        display: inline-block;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--color-primary);
+        transform-origin: center;
+      }
+      .navigation-toggle:active::after,
+      .navigation-toggle:focus::after,
+      .navigation-toggle:hover::after {
+        color: var(--color-secondary);
+      }
+      .navigation.open .navigation-toggle::after {
+        transform: scaleY(-1) translateY(-0.25em);
+      }
+      @media (min-width: 60em) {
+        .navigation-toggle {
+          color: var(--color-text);
+          pointer-events: none;
+          cursor: default;
+        }
+        .navigation-toggle::after {
+          display: none;
+        }
+      }
+      .navigation-questions-list {
+        padding: 0.5rem 1rem;
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: calc(100% - 1rem);
+        left: 0;
+        z-index: 1;
+        opacity: 0;
+        transform: scale(0.5, 0);
+        transform-origin: center top;
+        transition: opacity 0.1s, transform 0.2s ease-out;
+        background-color: #fff;
+        box-shadow: 0 0 0 1px var(--color-secondary),
+          0 2px 4px -1px var(--color-text);
+      }
+      .navigation.open .navigation-questions-list {
+        opacity: 1;
+        transform: none;
+      }
+      .navigation.no-motion .navigation-questions-list {
+        transition: none;
+      }
+      @media (min-width: 60em) {
+        .navigation-questions-list {
+          padding: 0;
+          flex-direction: row;
+          position: static;
+          opacity: 1;
+          transform: none;
+          transition: none;
+          background-color: transparent;
+          box-shadow: none;
+        }
+        .navigation-questions-list li {
+          margin: 0;
+        }
+      }
+      .navigation-questions-anchor {
+        visibility: hidden;
+      }
+      .navigation.open .navigation-questions-anchor {
+        visibility: visible;
+      }
+      @media (min-width: 60em) {
+        .navigation-questions-anchor {
+          visibility: visible;
+        }
+      }
+      .navigation-item-emoji {
+        width: 100%;
+        font-size: 1rem;
+        line-height: 1rem;
+        padding-bottom: 1.5rem;
+        margin-bottom: 1.5rem;
+        vertical-align: top;
+        align-content: flex-start;
+        border-bottom: 1px solid #efefef;
+      }
+      .navigation-item-home {
+        border-bottom: none;
+        padding-bottom: 0;
+        font-weight: 600;
+      }
+      @media (min-width: 60em) {
+        .navigation-item-emoji {
+          width: 50%;
+          margin-bottom: 2rem;
+          border-bottom: 1px solid #efefef;
+        }
+      }
+      .navigation-item-emoji em {
+        font-style: normal;
+        margin-right: 0.5rem;
+      }
+      .navigation-item-translations {
+        text-align: left;
+      }
+      @media (min-width: 60em) {
+        .navigation-item-translations {
+          text-align: right;
+        }
+      }
+      .navigation-item-home em {
+        color: #835eff;
+      }
+      .navigation-item-emoji a {
+        text-decoration: none;
+        display: inline-block;
+        vertical-align: middle;
+      }
+      @media (min-width: 60em) {
+        .navigation-item:not(:last-of-type) {
+          margin-right: 0.8rem;
+        }
+      }
+      .navigation-anchor[rel~="external"]::after {
+        content: " ➚";
+        color: var(--color-highlight);
+      }
+      .navigation-anchor.current {
+        border-bottom: 2px solid var(--color-highlight);
+        padding: 0 0 5px 0;
+      }
+      .topbar {
+        width: 100%;
+        height: 0.18rem;
+        background: var(--color-gradient);
+      }
+      .skip-link {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 0.5rem 1rem;
+        background-color: var(--color-primary);
+        color: #fff;
+        text-decoration: none;
+        transform: translateY(-100%);
+      }
+      .skip-link:focus {
+        transform: none;
+      }
+      .header {
+        margin-bottom: 2rem;
+      }
+      .header-big-title {
+        font-size: 2.3rem;
+        line-height: 1.06;
+        margin: 1.4rem 0 0.7rem;
+        color: var(--color-primary);
+        word-break: break-word;
+      }
+      .rtl .header-big-title {
+        text-align: right;
+      }
+      @media (min-width: 30em) {
+        .header-big-title {
+          margin: 1.4rem 0 0.7rem;
+          font-size: 4.6rem;
+        }
+      }
+      @media (min-width: 60em) {
+        .header-big-title {
+          margin: 2.1rem 0 0.7rem;
+          font-size: 5.4rem;
+        }
+      }
+      @supports (mix-blend-mode: lighten) {
+        .header-big-title {
+          display: inline-block;
+          position: relative;
+          color: #000;
+          background: #fff;
+          mix-blend-mode: multiply;
+        }
+        .header-big-title::before {
+          content: "";
+          display: block;
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          background-image: url("https://h5bp.github.io/Front-end-Developer-Interview-Questions/assets/images/gradient.svg");
+          background-size: cover;
+          pointer-events: none;
+        }
+        .header-big-title::before {
+          mix-blend-mode: screen;
+        }
+      }
+      .header-heading {
+        font-size: 2.3rem;
+        text-transform: uppercase;
+      }
+      .header-big-description {
+        font-size: 1.2rem;
+        line-height: 1.4;
+        padding: 1rem 0;
+      }
+      @media (min-width: 30em) {
+        .header-big-description {
+          font-size: 1.5rem;
+        }
+      }
+      @media (min-width: 60em) {
+        .header-big-description {
+          font-size: 1.8rem;
+        }
+      }
+      .header-description {
+        padding-top: 1rem;
+      }
+      body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        font-family: var(--font-family-body);
+        font-weight: 400;
+        font-size: 1.2rem;
+        line-height: 2;
+        color: var(--color-text);
+      }
+      section + section {
+        padding-top: 2rem;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: var(--font-family-heading);
+        color: var(--color-heading);
+        font-style: normal;
+        line-height: 1.2;
+        font-weight: 600;
+      }
+      section + section {
+        padding-top: 2rem;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+        color: var(--color-secondary);
+        transition: color ease-out var(--transition-duration);
+      }
+      a.current,
+      a:focus:not(.skip-link),
+      a:hover:not(.skip-link) {
+        color: var(--color-primary);
+      }
+      a:not(.navigation-anchor)[rel~="external"]:after {
+        content: " ➚";
+      }
+      ul:not(.navigation):not(.inline-list) {
+        list-style: none;
+      }
+      ul:not(.navigation):not(.inline-list) li::before {
+        content: "\25A0";
+        color: var(--color-primary);
+        font-weight: 700;
+        display: inline-block;
+        width: 1em;
+        margin-left: -1em;
+      }
+      .rtl ul:not(.navigation):not(.inline-list) li::before {
+        margin-right: -1em;
+        margin-left: initial;
+      }
+      li {
+        margin-bottom: 0.6rem;
+      }
+      b,
+      strong {
+        font-weight: 600;
+      }
+      time {
+        display: inline-block;
+        color: var(--color-gray-70);
+      }
+      [tabindex="-1"] {
+        outline: 0;
+      }
+      img,
+      svg {
+        vertical-align: middle;
+      }
+      img {
+        display: block;
+        max-width: 100%;
+        border-radius: var(--border-radius-default);
+      }
+      code {
+        font-family: var(--font-family-code);
+        color: var(--color-code);
+        font-style: normal;
+        font-size: 1rem;
+      }
+      blockquote:not([class]) {
+        padding-left: 1rem;
+        margin-left: -1rem;
+        border-left: 2px solid var(--color-primary);
+        color: var(--color-gray-70);
+        font-style: italic;
+      }
+      code[class*="language-"],
+      pre[class*="language-"] {
+        font-size: 0.9rem;
+        font-style: normal;
+      }
+      p + pre[class*="language-"] {
+        margin-bottom: 1.8rem;
+      }
+      mark {
+        color: var(--color-highlight);
+        background-color: transparent;
+      }
+      dt {
+        font-weight: 700;
+      }
+      dd + dt {
+        padding-top: 0.5rem;
+      }
+      abbr[title],
+      acronym[title] {
+        background: var(--color-gray-opacity);
+        border: 1px solid var(--color-gray-opacity);
+        cursor: help;
+      }
+      .container {
+        max-width: 66rem;
+        padding: 1.5rem 2rem 2rem;
+        margin-right: auto;
+        margin-left: auto;
+      }
+      @media (min-width: 30rem) {
+        .container {
+          padding: 3rem 4rem 4rem;
+        }
+      }
+      .content li:not(:last-of-type) {
+        margin-bottom: 1.2rem;
+      }
+      .content h2 {
+        max-width: 33rem;
+      }
+      .content > :not(:last-child) {
+        margin-bottom: 2rem;
+      }
+      .content :not(hr) + h2,
+      .content :not(hr) + h3 {
+        padding-top: 1rem;
+      }
+      .content ol:not(.inline-list),
+      .content ul:not(.inline-list) {
+        padding-left: 1.2rem;
+      }
+      .content-simple li:not(:last-of-type) {
+        margin-bottom: 0.5rem;
+      }
+      .content-edit {
+        text-align: right;
+        margin-top: 2rem;
+      }
+      .inline-list {
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .inline-list li {
+        padding: 0 5px;
+        display: inline-block;
+        vertical-align: middle;
+        text-align: center;
+      }
+      .inline-list li::before {
+        content: "";
+        margin-left: 0;
+      }
+      .inline-list li img {
+        display: block;
+        margin: auto;
+        margin-bottom: 0.6rem;
+      }
+      .inline-list li a {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0 0.15rem;
+      }
+      .inline-list-contributors li a,
+      .inline-list-original li a {
+        font-size: 1rem;
+      }
+      .avatar {
+        max-width: 12rem;
+      }
+      hr {
+        border: none;
+        bacground: none;
+        border-bottom: 1px solid #efefef;
+      }
+      .footer {
+        padding-top: 3rem;
+      }
+      .footer-text {
+        font-size: 0.8rem;
+      }
+    </style>
+    <link
+      href="chrome-extension://cjdnfmjmdligcpfcekfmenlhiopehjkd/web_resources/modal/modal.css"
+      rel="stylesheet"
+      id="__tmpStyle"
+    />
+    <style type="text/css">
+      a,
+      button,
+      .cursor-hover {
+        cursor: default !important;
+      }
+
+      a,
+      button,
+      .pointer-hover {
+        cursor: pointer !important;
+      }
+    </style>
+  </head>
+  <body
+    class="cursor-hover"
+    data-new-gr-c-s-check-loaded="14.1126.0"
+    data-gr-ext-installed=""
+    cz-shortcut-listen="true"
+  >
+    <div class="topbar"></div>
+    <div class="container cursor-hover">
+      <a
+        class="skip-link"
+        href="https://h5bp.org/Front-end-Developer-Interview-Questions/questions/coding-questions/#main-content"
+        >Skip to main content</a
+      >
+      <nav class="nav cursor-hover">
+        <ul class="navigation cursor-hover" id="navigation">
+          <li class="navigation-item-emoji navigation-item-home">
+            <a
+              class="navigation-anchor"
+              href="https://h5bp.org/Front-end-Developer-Interview-Questions/"
+              title="Home"
+              ><em>★</em><span>Front-end Developer Interview Questions</span></a
+            >
+          </li>
+          <li class="navigation-item-emoji navigation-item-translations">
+            <a
+              class="navigation-anchor"
+              href="https://h5bp.org/Front-end-Developer-Interview-Questions/translations"
+              title="Translations"
+              ><em>🌐</em><span>Translations</span></a
+            >
+          </li>
+          <li class="navigation-item navigation-questions-label">
+            <button
+              class="navigation-toggle"
+              id="navigation-toggle"
+              style="font-family: Arial, Bangla293, sans-serif"
+            >
+              Questions:
+            </button>
+          </li>
+          <li class="navigation-item navigation-questions">
+            <!-- <ul class="navigation navigation-questions-list">
+              <li class="navigation-item">
+                <a
+                  class="navigation-anchor navigation-questions-anchor"
+                  href="https://h5bp.org/Front-end-Developer-Interview-Questions/questions/general-questions/"
+                  title="General Questions"
+                  >General</a
+                >
+              </li>
+              <li class="navigation-item">
+                <a
+                  class="navigation-anchor navigation-questions-anchor"
+                  href="https://h5bp.org/Front-end-Developer-Interview-Questions/questions/html-questions/"
+                  title="HTML Questions"
+                  >HTML</a
+                >
+              </li>
+              <li class="navigation-item">
+                <a
+                  class="navigation-anchor navigation-questions-anchor"
+                  href="https://h5bp.org/Front-end-Developer-Interview-Questions/questions/css-questions/"
+                  title="CSS Questions"
+                  >CSS</a
+                >
+              </li>
+              <li class="navigation-item">
+                <a
+                  class="navigation-anchor navigation-questions-anchor"
+                  href="https://h5bp.org/Front-end-Developer-Interview-Questions/questions/javascript-questions/"
+                  title="JavaScript Questions"
+                  >JavaScript</a
+                >
+              </li>
+              <li class="navigation-item">
+                <a
+                  rel="external noreferrer noopener"
+                  target="_blank"
+                  class="navigation-anchor navigation-questions-anchor"
+                  href="https://scottaohara.github.io/accessibility_interview_questions/"
+                  title="Accessibility Questions (external link)"
+                  >A11y</a
+                >
+              </li>
+              <li class="navigation-item">
+                <a
+                  class="navigation-anchor navigation-questions-anchor"
+                  href="https://h5bp.org/Front-end-Developer-Interview-Questions/questions/testing-questions/"
+                  title="Testing Questions"
+                  >Testing</a
+                >
+              </li>
+              <li class="navigation-item">
+                <a
+                  class="navigation-anchor navigation-questions-anchor"
+                  href="https://h5bp.org/Front-end-Developer-Interview-Questions/questions/performance-questions/"
+                  title="Performance Questions"
+                  >Performance</a
+                >
+              </li>
+              <li class="navigation-item">
+                <a
+                  class="navigation-anchor navigation-questions-anchor"
+                  href="https://h5bp.org/Front-end-Developer-Interview-Questions/questions/network-questions/"
+                  title="Network Questions"
+                  >Network</a
+                >
+              </li>
+              <li class="navigation-item">
+                <a
+                  class="navigation-anchor navigation-questions-anchor current"
+                  href="https://h5bp.org/Front-end-Developer-Interview-Questions/questions/coding-questions/"
+                  title="Coding Questions"
+                  >Coding</a
+                >
+              </li>
+              <li class="navigation-item">
+                <a
+                  class="navigation-anchor navigation-questions-anchor"
+                  href="https://h5bp.org/Front-end-Developer-Interview-Questions/questions/fun-questions/"
+                  title="Fun Questions"
+                  >Fun</a
+                >
+              </li>
+            </ul> -->
+            <ul class="navigation navigation-questions-list cursor-hover">
+              <li class="navigation-item cursor-hover">
+                <!-- <a
+                  class="navigation-anchor navigation-questions-anchor current pointer-hover"
+                  href="https://h5bp.org/Front-end-Developer-Interview-Questions/questions/general-questions/"
+                  title="General Questions"
+                  >General</a
+                > -->
+                <a
+                  class="navigation-anchor navigation-questions-anchor pointer-hover"
+                  href="../index.html"
+                  title="General Questions"
+                  >General</a
+                >
+              </li>
+              <li class="navigation-item cursor-hover">
+                <!-- <a
+                  class="navigation-anchor navigation-questions-anchor pointer-hover"
+                  href="https://h5bp.org/Front-end-Developer-Interview-Questions/questions/html-questions/"
+                  title="HTML Questions"
+                  >HTML</a
+                > -->
+                <a
+                  class="navigation-anchor navigation-questions-anchor pointer-hover"
+                  href="html-questions.html"
+                  title="HTML Questions"
+                  >HTML</a
+                >
+              </li>
+              <li class="navigation-item">
+                <!-- <a
+                  class="navigation-anchor navigation-questions-anchor"
+                  href="https://h5bp.org/Front-end-Developer-Interview-Questions/questions/css-questions/"
+                  title="CSS Questions"
+                  >CSS</a
+                > -->
+                <a
+                  class="navigation-anchor navigation-questions-anchor"
+                  href="css-questions.html"
+                  title="CSS Questions"
+                  >CSS</a
+                >
+              </li>
+              <li class="navigation-item">
+                <!-- <a
+                  class="navigation-anchor navigation-questions-anchor"
+                  href="https://h5bp.org/Front-end-Developer-Interview-Questions/questions/javascript-questions/"
+                  title="JavaScript Questions"
+                  >JavaScript</a
+                > -->
+                <a
+                  class="navigation-anchor navigation-questions-anchor"
+                  href="javascript-questions.html"
+                  title="JavaScript Questions"
+                  >JavaScript</a
+                >
+              </li>
+              <!-- <li class="navigation-item">
+                <a
+                  rel="external noreferrer noopener"
+                  target="_blank"
+                  class="navigation-anchor navigation-questions-anchor"
+                  href="https://scottaohara.github.io/accessibility_interview_questions/"
+                  title="Accessibility Questions (external link)"
+                  >A11y</a
+                >
+              </li> -->
+              <li class="navigation-item">
+                <!-- <a
+                  class="navigation-anchor navigation-questions-anchor"
+                  href="https://h5bp.org/Front-end-Developer-Interview-Questions/questions/testing-questions/"
+                  title="Testing Questions"
+                  >Testing</a
+                > -->
+                <a
+                  class="navigation-anchor navigation-questions-anchor"
+                  href="testing-questions.html"
+                  title="JavaScript Questions"
+                  >Testing</a
+                >
+              </li>
+              <li class="navigation-item">
+                <!-- <a
+                  class="navigation-anchor navigation-questions-anchor"
+                  href="https://h5bp.org/Front-end-Developer-Interview-Questions/questions/performance-questions/"
+                  title="Performance Questions"
+                  >Performance</a
+                > -->
+                <a
+                  class="navigation-anchor navigation-questions-anchor"
+                  href="performance-questions.html"
+                  title="JavaScript Questions"
+                  >Performance</a
+                >
+              </li>
+              <li class="navigation-item">
+                <!-- <a
+                  class="navigation-anchor navigation-questions-anchor"
+                  href="https://h5bp.org/Front-end-Developer-Interview-Questions/questions/network-questions/"
+                  title="Network Questions"
+                  >Network</a
+                > -->
+                <a
+                  class="navigation-anchor navigation-questions-anchor"
+                  href="network-questions.html"
+                  title="JavaScript Questions"
+                  >Network</a
+                >
+              </li>
+              <li class="navigation-item">
+                <!-- <a
+                  class="navigation-anchor navigation-questions-anchor"
+                  href="https://h5bp.org/Front-end-Developer-Interview-Questions/questions/coding-questions/"
+                  title="Coding Questions"
+                  >Coding</a
+                > -->
+                <a
+                  class="navigation-anchor navigation-questions-anchor current"
+                  href="coding-questions.html"
+                  title="JavaScript Questions"
+                  >Coding</a
+                >
+              </li>
+              <!-- <li class="navigation-item">
+                <a
+                  class="navigation-anchor navigation-questions-anchor"
+                  href="https://h5bp.org/Front-end-Developer-Interview-Questions/questions/fun-questions/"
+                  title="Fun Questions"
+                  >Fun</a
+                >
+              </li> -->
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <main id="main-content" tabindex="-1">
+        <header class="header cursor-hover">
+          <h1 class="header-big-title cursor-hover">Coding Questions</h1>
+        </header>
+        <div class="content">
+          <p>
+            Question: What is the value of
+            <code
+              style="
+                font-family: Menlo, Monaco, 'Courier New', monospace, Bangla293,
+                  sans-serif;
+              "
+              >foo</code
+            >?
+          </p>
+          <pre
+            class="language-javascript"
+            style="
+              font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier,
+                monospace, Bangla293, sans-serif;
+              position: relative;
+            "
+          ><code class="language-javascript" style="font-family: Inconsolata, Monaco, Consolas, &quot;Courier New&quot;, Courier, monospace, Bangla293, sans-serif;"><span class="token keyword">var</span> foo <span class="token operator">=</span> <span class="token number">10</span> <span class="token operator">+</span> <span class="token string">'20'</span><span class="token punctuation">;</span></code><div class="open_grepper_editor" title="Edit &amp; Save To Grepper"></div></pre>
+          <p>Question: What will be the output of the code below?</p>
+          <pre
+            class="language-javascript"
+            style="
+              font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier,
+                monospace, Bangla293, sans-serif;
+              position: relative;
+            "
+          ><code class="language-javascript" style="font-family: Inconsolata, Monaco, Consolas, &quot;Courier New&quot;, Courier, monospace, Bangla293, sans-serif;">console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token number">0.1</span> <span class="token operator">+</span> <span class="token number">0.2</span> <span class="token operator">==</span> <span class="token number">0.3</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><div class="open_grepper_editor" title="Edit &amp; Save To Grepper"></div></pre>
+          <p>Question: How would you make this work?</p>
+          <pre
+            class="language-javascript"
+            style="
+              font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier,
+                monospace, Bangla293, sans-serif;
+              position: relative;
+            "
+          ><code class="language-javascript" style="font-family: Inconsolata, Monaco, Consolas, &quot;Courier New&quot;, Courier, monospace, Bangla293, sans-serif;"><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 7</span>
+<span class="token function">add</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 7</span></code><div class="open_grepper_editor" title="Edit &amp; Save To Grepper"></div></pre>
+          <p>Question: What value is returned from the following statement?</p>
+          <pre
+            class="language-javascript"
+            style="
+              font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier,
+                monospace, Bangla293, sans-serif;
+              position: relative;
+            "
+          ><code class="language-javascript" style="font-family: Inconsolata, Monaco, Consolas, &quot;Courier New&quot;, Courier, monospace, Bangla293, sans-serif;"><span class="token string">"i'm a lasagna hog"</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">reverse</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><div class="open_grepper_editor" title="Edit &amp; Save To Grepper"></div></pre>
+          <p>
+            Question: What is the value of
+            <code
+              style="
+                font-family: Menlo, Monaco, 'Courier New', monospace, Bangla293,
+                  sans-serif;
+              "
+              >window.foo</code
+            >?
+          </p>
+          <pre
+            class="language-javascript"
+            style="
+              font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier,
+                monospace, Bangla293, sans-serif;
+              position: relative;
+            "
+          ><code class="language-javascript" style="font-family: Inconsolata, Monaco, Consolas, &quot;Courier New&quot;, Courier, monospace, Bangla293, sans-serif;"><span class="token punctuation">(</span> window<span class="token punctuation">.</span>foo <span class="token operator">||</span> <span class="token punctuation">(</span> window<span class="token punctuation">.</span>foo <span class="token operator">=</span> <span class="token string">"bar"</span> <span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span></code><div class="open_grepper_editor" title="Edit &amp; Save To Grepper"></div></pre>
+          <p>Question: What is the outcome of the two alerts below?</p>
+          <pre
+            class="language-javascript"
+            style="
+              font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier,
+                monospace, Bangla293, sans-serif;
+              position: relative;
+            "
+          ><code class="language-javascript" style="font-family: Inconsolata, Monaco, Consolas, &quot;Courier New&quot;, Courier, monospace, Bangla293, sans-serif;"><span class="token keyword">var</span> foo <span class="token operator">=</span> <span class="token string">"Hello"</span><span class="token punctuation">;</span>
+<span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> bar <span class="token operator">=</span> <span class="token string">" World"</span><span class="token punctuation">;</span>
+  <span class="token function">alert</span><span class="token punctuation">(</span>foo <span class="token operator">+</span> bar<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">alert</span><span class="token punctuation">(</span>foo <span class="token operator">+</span> bar<span class="token punctuation">)</span><span class="token punctuation">;</span></code><div class="open_grepper_editor" title="Edit &amp; Save To Grepper"></div></pre>
+          <p>
+            Question: What is the value of
+            <code
+              style="
+                font-family: Menlo, Monaco, 'Courier New', monospace, Bangla293,
+                  sans-serif;
+              "
+              >foo.length</code
+            >?
+          </p>
+          <pre
+            class="language-javascript"
+            style="
+              font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier,
+                monospace, Bangla293, sans-serif;
+              position: relative;
+            "
+          ><code class="language-javascript" style="font-family: Inconsolata, Monaco, Consolas, &quot;Courier New&quot;, Courier, monospace, Bangla293, sans-serif;"><span class="token keyword">var</span> foo <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+foo<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+foo<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><div class="open_grepper_editor" title="Edit &amp; Save To Grepper"></div></pre>
+          <p>
+            Question: What is the value of
+            <code
+              style="
+                font-family: Menlo, Monaco, 'Courier New', monospace, Bangla293,
+                  sans-serif;
+              "
+              >foo.x</code
+            >?
+          </p>
+          <pre
+            class="language-javascript"
+            style="
+              font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier,
+                monospace, Bangla293, sans-serif;
+              position: relative;
+            "
+          ><code class="language-javascript" style="font-family: Inconsolata, Monaco, Consolas, &quot;Courier New&quot;, Courier, monospace, Bangla293, sans-serif;"><span class="token keyword">var</span> foo <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token literal-property property">n</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> bar <span class="token operator">=</span> foo<span class="token punctuation">;</span>
+foo<span class="token punctuation">.</span>x <span class="token operator">=</span> foo <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token literal-property property">n</span><span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">}</span><span class="token punctuation">;</span></code><div class="open_grepper_editor" title="Edit &amp; Save To Grepper"></div></pre>
+          <p>Question: What does the following code print?</p>
+          <pre
+            class="language-javascript"
+            style="
+              font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier,
+                monospace, Bangla293, sans-serif;
+              position: relative;
+            "
+          ><code class="language-javascript" style="font-family: Inconsolata, Monaco, Consolas, &quot;Courier New&quot;, Courier, monospace, Bangla293, sans-serif;">console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'one'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'two'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+Promise<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'three'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'four'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><div class="open_grepper_editor" title="Edit &amp; Save To Grepper"></div></pre>
+          <p>Question: What is the difference between these four promises?</p>
+          <pre
+            class="language-javascript"
+            style="
+              font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier,
+                monospace, Bangla293, sans-serif;
+              position: relative;
+            "
+          ><code class="language-javascript" style="font-family: Inconsolata, Monaco, Consolas, &quot;Courier New&quot;, Courier, monospace, Bangla293, sans-serif;"><span class="token function">doSomething</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token function">doSomethingElse</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">doSomething</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token function">doSomethingElse</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">doSomething</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token function">doSomethingElse</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">doSomething</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>doSomethingElse<span class="token punctuation">)</span><span class="token punctuation">;</span></code><div class="open_grepper_editor" title="Edit &amp; Save To Grepper"></div></pre>
+          <p>
+            Question: What will the code below output to the console and why?
+          </p>
+          <pre
+            class="language-javascript"
+            style="
+              font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier,
+                monospace, Bangla293, sans-serif;
+              position: relative;
+            "
+          ><code class="language-javascript" style="font-family: Inconsolata, Monaco, Consolas, &quot;Courier New&quot;, Courier, monospace, Bangla293, sans-serif;"><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+  <span class="token keyword">var</span> a <span class="token operator">=</span> b <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"a defined? "</span> <span class="token operator">+</span> <span class="token punctuation">(</span><span class="token keyword">typeof</span> a <span class="token operator">!==</span> <span class="token string">'undefined'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"b defined? "</span> <span class="token operator">+</span> <span class="token punctuation">(</span><span class="token keyword">typeof</span> b <span class="token operator">!==</span> <span class="token string">'undefined'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><div class="open_grepper_editor" title="Edit &amp; Save To Grepper"></div></pre>
+          <p>
+            Question: Consider the two functions below. Will they both return
+            the same thing? Why or why not?
+          </p>
+          <pre
+            class="language-javascript"
+            style="
+              font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier,
+                monospace, Bangla293, sans-serif;
+              position: relative;
+            "
+          ><code class="language-javascript" style="font-family: Inconsolata, Monaco, Consolas, &quot;Courier New&quot;, Courier, monospace, Bangla293, sans-serif;"><span class="token keyword">function</span> <span class="token function">foo1</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>
+      <span class="token literal-property property">bar</span><span class="token operator">:</span> <span class="token string">"hello"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">foo2</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">return</span>
+  <span class="token punctuation">{</span>
+      <span class="token literal-property property">bar</span><span class="token operator">:</span> <span class="token string">"hello"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code><div class="open_grepper_editor" title="Edit &amp; Save To Grepper"></div></pre>
+        </div>
+        <div class="content-edit">
+          <a
+            rel="external noreferrer noopener"
+            target="_blank"
+            href="https://github.com/h5bp/Front-end-Developer-Interview-Questions/tree/master/src/questions/coding-questions.md"
+            >Edit this page</a
+          >
+        </div>
+      </main>
+      <footer class="footer">
+        <p class="footer-text">
+          Copyright © 2012 - 2023. Contributors to
+          <a
+            href="https://github.com/h5bp/Front-end-Developer-Interview-Questions/blob/main/CONTRIBUTORS.md"
+            >Front-end-Developer-Interview-Questions.</a
+          ><br />Curious about the project?
+          <a
+            href="https://h5bp.org/Front-end-Developer-Interview-Questions/about/"
+            >Read more about here</a
+          >.
+        </p>
+      </footer>
+    </div>
+    <script>
+      console.log(
+        "%cA black belt is a white belt that didn't quit.",
+        "color: #fff; font-size: 20px; text-shadow: 1px 1px 1px #000; font-family: serif;"
+      );
+      var navToggle = document.getElementById("navigation-toggle"),
+        nav = document.getElementById("navigation");
+      navToggle.addEventListener("click", function () {
+        nav.classList.toggle("open");
+      }),
+        window.addEventListener("resize", function () {
+          document.width > 960
+            ? nav.classList.remove("active")
+            : (nav.classList.add("no-motion"),
+              setTimeout(function () {
+                nav.classList.remove("no-motion");
+              }, 250));
+        });
+    </script>
+    <div>
+      <div
+        id="twoseven-ext-tab-media-modal"
+        class="twoseven-ext-tab-media-modal"
+        style="display: none"
+      >
+        <!-- Modal content -->
+        <div class="twoseven-ext-tab-media-modal-content">
+          <div class="iframe-container" style="height: 100%; width: 100%">
+            <span class="close">×</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="betternet-wrapper">
+      <template shadowrootmode="open">
+        <style>
+          .betternet_content_clean * {
+          }
+        </style>
+        <style>
+          @import url("chrome-extension://gjknjjomckknofjidppipffbpoekiipm/content/styles.css");
+        </style>
+        <div id="betternet_content_root" class="betternet_content_clean">
+          <div class="betternet_content"></div>
+        </div>
+      </template>
+    </div>
+    <script src="chrome-extension://pnpapokldhgeofbkljienpjofgjkafkm/js/initCursor.js"></script>
+    <div id="torrent-scanner-popup" style="display: none">
+      <template shadowrootmode="open"
+        ><link
+          rel="stylesheet"
+          href="chrome-extension://aegnopegbbhjeeiganiajffnalhlkkjb/css/custom.css"
+        />
+        <div id="yf-bt-wrapper" class="free">
+          <div class="header">
+            <img
+              class="sts-logo"
+              src="chrome-extension://aegnopegbbhjeeiganiajffnalhlkkjb/img/assets/ts-free-logo.png"
+            />
+            <div class="search-content">
+              <input
+                id="search-input"
+                class="search-input"
+                type="search"
+                placeholder="Start your search here..."
+              /><span id="search-btn" class="search-btn"></span>
+            </div>
+          </div>
+          <div class="container">
+            <div class="main-container">
+              <div id="torrent-data" class="torrent-content">
+                <div class="t-table">
+                  <div class="t-header">
+                    <div class="t-name">Torrent search results</div>
+                  </div>
+                  <div id="checked-sites" class="checked-sites-section">
+                    <div class="left">Checked Sites</div>
+                    <div class="right">
+                      <span id="sites-count" class="sites-count">0</span>
+                    </div>
+                  </div>
+                  <div id="table-body" class="t-body">
+                    <div id="loading" class="spinner">
+                      <div class="bounce1"></div>
+                      <div class="bounce2"></div>
+                      <div class="bounce3"></div>
+                    </div>
+                    <div class="table-message-container" id="table-message">
+                      <p>
+                        No items to list <br />
+                        Use the search bar above for instant results
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tooltip">
+                <p class="tooltip-text">
+                  To see search results, type here and hit `Enter`
+                </p>
+              </div>
+              <div class="footer">
+                <span
+                  ><span id="numberScanned" class="numberScanned"
+                    >No results</span
+                  ></span
+                >
+              </div>
+              <div class="upgradeProPanel">
+                <div class="upgradeProPanelTitle">
+                  Try our Pro Versions to unlock:
+                </div>
+                <div class="upgradeProPanelList">
+                  <div><p>Faster Results</p></div>
+                  <div><p>Secure Torrenting</p></div>
+                  <div>
+                    <p>Unlimited Search Results with detailed torrent info</p>
+                  </div>
+                  <div>
+                    <p>
+                      1-YR Subscription to CyberGhost VPN
+                      <span style="font-size: 8px">(PRO+VPN only)</span>
+                    </p>
+                  </div>
+                </div>
+                <a
+                  class="upgrade-to-pro-button-2"
+                  id="buy-pro-vpn"
+                  href="https://www.utorrent.com/webpro-offer/?utm_source=Lavasoft&amp;utm_medium=version_1.0&amp;utm_campaign=Scanner"
+                  target="_blank"
+                  >BUY PRO + VPN</a
+                ><a
+                  class="upgrade-to-pro-button-2"
+                  id="buy-pro"
+                  href="https://www.utorrent.com/webpro-offer/?utm_source=Lavasoft&amp;utm_medium=version_1.0&amp;utm_campaign=Scanner"
+                  target="_blank"
+                  >BUY PRO</a
+                >
+              </div>
+            </div>
+            <div class="sync-container nav-se-container">
+              <div class="nav-se-content">
+                <img
+                  class="sync-icon nav-se-icon"
+                  src="chrome-extension://aegnopegbbhjeeiganiajffnalhlkkjb/img/assets/icon-sync.svg"
+                />
+                <div class="nav-se-title">
+                  One more step to go before you start torrenting!
+                </div>
+                <p class="nav-se-text">
+                  This extension can sync results with BitTorrent and/or
+                  uTorrent for instant downloading.
+                </p>
+                <p class="nav-se-text">
+                  To activate this feature, please click on the button below,
+                  and then on the Chrome message to activate the 'Messaging
+                  Permission'.
+                </p>
+                <button class="sync-permission-btn nav-se-btn">
+                  Activate Messaging Permission
+                </button>
+              </div>
+              <div class="nav-se-content display-none">
+                <img
+                  class="sync-icon nav-se-icon"
+                  src="chrome-extension://aegnopegbbhjeeiganiajffnalhlkkjb/img/assets/icon-sync.svg"
+                />
+                <div class="nav-se-title">Syncing...</div>
+                <p class="nav-se-text">
+                  Please allow Messaging Permissions in the proceeding Chrome
+                  message.
+                </p>
+              </div>
+              <div class="nav-se-content display-none">
+                <img
+                  class="sync-icon nav-se-icon"
+                  src="chrome-extension://aegnopegbbhjeeiganiajffnalhlkkjb/img/assets/icon-success.svg"
+                />
+                <div class="nav-se-title">Sync Complete</div>
+                <p class="nav-se-text">
+                  You have successfully activated the “Messaging Permission”
+                  feature. All your search results will sync with BitTorrent
+                  and/or uTorrent.
+                </p>
+              </div>
+            </div>
+            <div class="license-container nav-se-container">
+              <div class="nav-se-content">
+                <img
+                  class="nav-se-icon"
+                  src="chrome-extension://aegnopegbbhjeeiganiajffnalhlkkjb/img/assets/icon-key2.svg"
+                />
+                <div class="nav-se-title">Enter License Key</div>
+                <p class="nav-se-text">
+                  Enter your license key and click on the activate button to
+                  start using <span>µTorrent Web Pro.</span>
+                </p>
+                <input
+                  type="text"
+                  id="license-input-key"
+                  class="license-input-key"
+                  placeholder="Enter Key"
+                />
+                <div class="license-spinner">
+                  <div class="bounce1"></div>
+                  <div class="bounce2"></div>
+                  <div class="bounce3"></div>
+                </div>
+                <button
+                  id="license-activate-button"
+                  class="license-activate-button nav-se-btn"
+                >
+                  Activate
+                </button>
+                <p>
+                  Don't have a license key?
+                  <a class="license-buy-link" target="_blank">Click here</a>
+                </p>
+              </div>
+              <div class="nav-se-content display-none">
+                <img
+                  class="nav-se-icon"
+                  src="chrome-extension://aegnopegbbhjeeiganiajffnalhlkkjb/img/assets/icon-success.svg"
+                />
+                <div class="nav-se-title">Happy Torrenting!</div>
+                <p class="nav-se-text">You are now an active PRO user</p>
+                <p class="nav-se-text">
+                  Your key is valid until <span class="expiry-date"></span>
+                </p>
+              </div>
+              <div class="nav-se-content display-none">
+                <img
+                  class="nav-se-icon"
+                  src="chrome-extension://aegnopegbbhjeeiganiajffnalhlkkjb/img/assets/icon-alert.svg"
+                />
+                <div class="nav-se-title">Your license key has expired</div>
+                <p class="nav-se-text">
+                  Looks like your license key has expired, to renew your PRO
+                  license key, please select a license type:
+                </p>
+                <a
+                  class="upgrade-to-pro-button-2 buy-license-expiry-button"
+                  href="https://www.utorrent.com/webpro-offer/?utm_source=Lavasoft&amp;utm_medium=version_1.0&amp;utm_campaign=Scanner"
+                  target="_blank"
+                  >Buy Pro + VPN</a
+                ><a
+                  class="upgrade-to-pro-button-2 buy-license-expiry-button"
+                  href="https://www.utorrent.com/webpro-offer/?utm_source=Lavasoft&amp;utm_medium=version_1.0&amp;utm_campaign=Scanner"
+                  target="_blank"
+                  >Buy Pro</a
+                >
+                <p class="nav-se-text">
+                  Already have a license key?
+                  <a class="link" id="show-license-panel">Click here</a>
+                </p>
+              </div>
+              <div class="nav-se-content display-none">
+                <img
+                  class="nav-se-icon"
+                  src="chrome-extension://aegnopegbbhjeeiganiajffnalhlkkjb/img/assets/icon-success.svg"
+                />
+                <div class="nav-se-title">Pro User</div>
+                <p class="nav-se-text">
+                  Your key is valid until <span class="expiry-date"></span>
+                </p>
+                <p class="nav-se-text">Your License Key:</p>
+                <p class="nav-se-text"></p>
+                <p class="nav-se-text margin-top-50">
+                  Switch back to Torrent Scanner Free?
+                </p>
+                <button class="activate-free-btn nav-se-btn">
+                  Revert to Free Version
+                </button>
+              </div>
+            </div>
+            <div class="feedback-container nav-se-container">
+              <div class="nav-se-content">
+                <img
+                  class="nav-se-icon"
+                  src="chrome-extension://aegnopegbbhjeeiganiajffnalhlkkjb/img/assets/icon-feedback.svg"
+                />
+                <div class="nav-se-title">Feedback</div>
+                <p class="nav-se-text">
+                  Help us improve Torrent Scanner, send us comments, bugs,
+                  feedback, and suggestions.
+                </p>
+                <button id="feedback-button" class="feedback-button nav-se-btn">
+                  Send Feedback
+                </button>
+              </div>
+            </div>
+            <div class="settings-container nav-se-container">
+              <div class="nav-se-content">
+                <div class="settings-title">Settings</div>
+              </div>
+              <div class="s-table">
+                <div class="s-row">
+                  <div class="s-title">
+                    FAQ
+                    <div class="s-arrow"><span class="arrow-down"></span></div>
+                  </div>
+                  <div class="s-content faq-content">
+                    <p class="faq-text">
+                      FAQ:
+                      <a
+                        href="chrome-extension://aegnopegbbhjeeiganiajffnalhlkkjb/faq.html"
+                        target="_blank"
+                        >Click here</a
+                      >
+                    </p>
+                  </div>
+                </div>
+                <div class="s-row">
+                  <div class="s-title">
+                    Rate the extension
+                    <div class="s-arrow"><span class="arrow-down"></span></div>
+                  </div>
+                  <div class="s-content">
+                    <p class="rate-text">
+                      How did you like the extension experience?
+                    </p>
+                    <div class="rating">
+                      <span class="rating-star">★</span
+                      ><span class="rating-star">★</span
+                      ><span class="rating-star">★</span
+                      ><span class="rating-star">★</span
+                      ><span class="rating-star">★</span>
+                    </div>
+                    <button class="rating-btn nav-se-btn" disabled="">
+                      Submit
+                    </button>
+                  </div>
+                </div>
+                <div class="s-row">
+                  <div class="s-title">
+                    About
+                    <div class="s-arrow"><span class="arrow-down"></span></div>
+                  </div>
+                  <div class="s-content about-content">
+                    <div class="about-version">
+                      Version 1.3.0 <br /><br />
+                      What's New
+                    </div>
+                    <div class="about-new">
+                      <p></p>
+                      <ul>
+                        <li>
+                          Experience a complete new User Interface of the
+                          extension. It is enhanced and user friendly now.
+                        </li>
+                        <li>Squashed some bugs.</li>
+                      </ul>
+                      <p></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="s-row">
+                  <div class="s-title">
+                    Privacy Policy
+                    <div class="s-arrow"><span class="arrow-down"></span></div>
+                  </div>
+                  <div class="s-content">
+                    <div class="policy-text">
+                      Adaware Software (7270356 Canada Inc.) is the operator of
+                      the Adaware products suites and related services (the
+                      “<b>Company</b>”, ”<b>we</b>” or “<b>us</b>”). We respect
+                      your privacy rights and we are committed to protecting
+                      them. This privacy policy (“<b>Privacy Policy</b>” or
+                      simply “<b>policy</b>”) governs our products, services and
+                      websites that link to this Privacy Policy, and describes
+                      our practices of processing data from you. By
+                      “<b>you</b>”, we refer to either or all of the following:
+                      (i) visitors to our websites that links to this Privacy
+                      Policy (“<b>Visitor</b>” and “<b>Website</b>”,
+                      respectively); (ii) our customers using our software
+                      products and Services (“<b>User</b>”); and (c) a business
+                      customer, a business partner that has a contractual
+                      relationship with us or a prospective customer that is yet
+                      to be engaged in a contract with us (“Business Customer”).
+                      Unless explicitly mentioned otherwise, the information in
+                      this Privacy Policy refers to any and all data subject
+                      types (“you” or “your’). <br /><br />
+                      For the purpose of this policy, the “<b>Service(s)</b>”
+                      shall include any software licensed by the Company,
+                      including features offered by or within the installed
+                      software or additional software scripts available therein
+                      (either downloaded from one of our websites, pre-installed
+                      on your device, downloaded through a third party website,
+                      obtained on a physical medium, or otherwise), or services
+                      provided through and/or on top such software, services
+                      offered on our websites, communication forums, support
+                      services, account operation, updates, enhancements, new
+                      features, premium support, extended guarantees, online
+                      version and free versions of a software or additional
+                      services or features as we ay make available from time to
+                      time. <br /><br />
+                      If you are a California resident, please also see our
+                      <a href="https://www.adaware.com/CCPA/" target="_blank"
+                        >CCPA Notice</a
+                      >. <br /><br />
+                      <a
+                        href="https://www.adaware.com/privacy-policy/"
+                        target="_blank"
+                        >Read more</a
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="s-row" style="display: none">
+                  <div class="s-title">
+                    Contact Us
+                    <div class="s-arrow"><span class="arrow-down"></span></div>
+                  </div>
+                  <div class="s-content">
+                    <div class="contact-text">
+                      For any payment and order-related support, please contact
+                      us at Email:
+                      <a href="mailto:support@torrentscanner.zendesk.com"
+                        >support@torrentscanner.zendesk.com</a
+                      >
+                      or
+                      <a href="mailto:pcsoftwareinfo.com">pcsoftwareinfo.com</a
+                      ><br /><br />Phone:
+                      <a
+                        href="https://pcsoftwareinfo.com/contact.aspx"
+                        target="_blank"
+                        >Click here</a
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="nav">
+            <button id="btnSync" class="nav-btn">Sync</button
+            ><button id="btnLicense" class="nav-btn">License</button
+            ><button id="btnHome" class="nav-btn">Home</button
+            ><button id="btnFeedback" class="nav-btn">Feedback</button
+            ><button id="btnSettings" class="nav-btn">Settings</button>
+          </div>
+        </div></template
+      >
+    </div>
+    <style>
+      @font-face {
+        font-family: Bangla293;
+        src: local("Siyam Rupali");
+        unicode-range: U+0980-09FF;
+      }
+      body {
+        font-family: Bangla293, Georgia, serif;
+      }
+    </style>
+  </body>
+  <grammarly-desktop-integration data-grammarly-shadow-root="true"
+    ><template shadowrootmode="open"
+      ><style>
+        div.grammarly-desktop-integration {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border: 0;
+          -moz-user-select: none;
+          -webkit-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+        }
+
+        div.grammarly-desktop-integration:before {
+          content: attr(data-content);
+        }
+      </style>
+      <div
+        aria-label="grammarly-integration"
+        role="group"
+        tabindex="-1"
+        class="grammarly-desktop-integration"
+        data-content='{"mode":"full","isActive":true,"isUserDisabled":false}'
+      ></div></template
+  ></grammarly-desktop-integration>
+</html>
